@@ -324,5 +324,210 @@ public:
       return ostr;
   }
 };
+template <typename T>
+class TDynamicVectorTriangle {
+protected:
+    size_t sz;
+    size_t si;
+    T* pMem;
+public:
+    TDynamicVectorTriangle(size_t size = 1, size_t si_ = 0) : sz(size), si(si_)
+    {
+        if (sz == 0)
+            throw out_of_range("Vector size should be greater than zero");
+        else if (sz > MAX_VECTOR_SIZE) { throw "too large"; }
+        if (si > MAX_VECTOR_SIZE) { throw "too large"; }
+        pMem = new T[sz]();// {}; // У типа T д.б. констуктор по умолчанию
+    }
+    TDynamicVectorTriangle(T* arr, size_t s, size_t _si) : sz(s), si(_si) {
+        if (sz == 0)
+            throw ("Vector size should be greater than zero");
+        if (sz > MAX_VECTOR_SIZE) {
+            throw ("Vector is too large");
+        }
+        if (si > MAX_VECTOR_SIZE) {
+            throw ("Vector is too large");
+        }
+        assert(arr != nullptr && "TDynamicVector ctor requires non-nullptr arg");
+        pMem = new T[sz];
+        std::copy(arr, arr + sz, pMem);
+    }
+
+    TDynamicVectorTriangle(const TDynamicVectorTriangle& v) : sz(v.sz), si(v.si)
+    {
+        pMem = new T[sz];
+        for (size_t i = 0; i < sz; i++) {
+            pMem[i] = v.pMem[i];
+        }
+    }
+    TDynamicVectorTriangle(TDynamicVectorTriangle&& v) noexcept
+    {
+        sz = v.sz;
+        si = v.si;
+        pMem = v.pMem;
+        v.pMem = nullptr;
+        v.sz = 0;
+        v.si = 0;
+        
+    }
+    ~TDynamicVectorTriangle()
+    {
+        delete[] pMem;
+    }
+    TDynamicVectorTriangle& operator=(const TDynamicVectorTriangle& v)
+    {
+        if (this != &v) {
+            if (sz != v.sz) {
+                sz = v.sz;
+                delete[] pMem;
+                pMem = new T[sz];
+            }
+            si = v.si;
+            for (size_t i = 0; i < sz; i++) { pMem[i] = v.pMem[i]; }
+        }
+        return *this;
+    }
+    TDynamicVectorTriangle& operator=(TDynamicVectorTriangle&& v) noexcept
+    {
+        if (this != &v) {
+            sz = v.sz;
+            si = v.si;
+            delete[] pMem;
+            pMem = v.pMem;
+            v.pMem = nullptr;
+            v.sz = 0;
+            v.si = 0;
+        }
+        return *this;
+    }
+
+    size_t size() const noexcept { return sz; }
+    size_t num_strok() const noexcept { return si; }   
+
+
+    // индексация
+    T& operator[](size_t ind)
+    {
+        if (ind < si || ind - si >= sz) {
+            throw "Error";
+        }
+        return pMem[ind - si];
+    }
+    const T& operator[](size_t ind) const
+    {
+        if (ind < si || ind - si >= sz) {
+            throw "Error";
+        }
+        return pMem[ind-si];
+    }
+    // индексация с контролем
+    T& at(size_t ind)
+    {
+        if (ind < si || ind - si >= sz) { throw "Error"; }
+        else { return pMem[ind-si]; }
+    }
+    const T& at(size_t ind) const
+    {
+        if (ind < si || ind - si >= sz) { throw "Error"; }
+        else { return pMem[ind-si]; }
+    }
+
+    // сравнение
+    bool operator==(const TDynamicVectorTriangle& v) const noexcept
+    {
+        if (sz != v.sz || si != v.si) { return false; }
+        else {
+            for (size_t i = 0; i < sz; i++) {
+                if (pMem[i] != v.pMem[i]) return false;
+            }
+        }
+        return true;
+    }
+    bool operator!=(const TDynamicVectorTriangle& v) const noexcept
+    {
+        if (*this == v) { return false; }
+        else { return true; }
+    }
+
+    // скалярные операции
+    TDynamicVectorTriangle operator+(T val)
+    {
+        TDynamicVectorTriangle res(*this);
+        for (size_t i = 0; i < sz; i++) { res.pMem[i] += val; }
+        return res;
+    }
+    TDynamicVectorTriangle operator-(T val)
+    {
+        TDynamicVectorTriangle res(*this);
+        for (size_t i = 0; i < sz; i++) { res.pMem[i] -= val; }
+        return res;
+    }
+    TDynamicVectorTriangle operator*(T val)
+    {
+
+        TDynamicVectorTriangle res(*this);
+        for (size_t i = 0; i < sz; i++) { res.pMem[i] *= val; }
+        return res;
+    }
+
+    // векторные операции
+    TDynamicVectorTriangle operator+(const TDynamicVectorTriangle& v)
+    {
+        if (sz != v.sz || si != v.si) { throw "Error"; }
+        else {
+            TDynamicVectorTriangle res(*this);
+            for (size_t i = 0; i < sz; i++) {
+                res.pMem[i] += v.pMem[i];
+            }
+            return res;
+        }
+
+    }
+    TDynamicVectorTriangle operator-(const TDynamicVectorTriangle& v)
+    {
+        if (sz != v.sz || si != v.si) { throw "Error"; }
+        else {
+            TDynamicVectorTriangle res(*this);
+            for (size_t i = 0; i < sz; i++) {
+                res.pMem[i] -= v.pMem[i];
+            }
+            return res;
+        }
+
+    }
+    T operator*(const TDynamicVectorTriangle& v)
+    {
+        if (sz != v.sz || si != v.si) { throw "Error"; }
+        T res = 0;
+
+        for (size_t i = 0; i < sz; i++) {
+            res += pMem[i] * v.pMem[i];
+        }
+
+        return res;
+    }
+
+    friend void swap(TDynamicVectorTriangle& lhs, TDynamicVectorTriangle& rhs) noexcept
+    {
+        std::swap(lhs.sz, rhs.sz);
+        std::swap(lhs.si, rhs.si);
+        std::swap(lhs.pMem, rhs.pMem);
+    }
+
+    // ввод/вывод
+    friend istream& operator>>(istream& istr, TDynamicVectorTriangle& v)
+    {
+        for (size_t i = 0; i < v.sz; i++)
+            istr >> v.pMem[i]; // требуется оператор>> для типа T
+        return istr;
+    }
+    friend ostream& operator<<(ostream& ostr, const TDynamicVectorTriangle& v)
+    {
+        for (size_t i = 0; i < v.sz; i++)
+            ostr << v.pMem[i] << ' '; // требуется оператор<< для типа T
+        return ostr;
+    }
+
+};
 
 #endif
