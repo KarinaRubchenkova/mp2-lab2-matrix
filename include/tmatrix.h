@@ -636,7 +636,8 @@ public:
     {
         for (size_t i = 0; i < v.sz; i++) {
             for (size_t j = 0; j < v.sz; j++) {
-                ostr << "| " << std::setw(5) << v.pMem[i][j] << ' ';
+                if(v.pMem[i][j] != 0) ostr << "| " << std::setw(5) << v.pMem[i][j] << ' ';
+                else { ostr << "| " << std::setw(5) << ' ' << ' '; }
             }
 
             ostr << "| " << std::endl;
