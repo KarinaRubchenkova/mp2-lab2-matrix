@@ -26,5 +26,19 @@ void main()
   cout << "Matrix a = " << endl << a << endl;
   cout << "Matrix b = " << endl << b << endl;
   cout << "Matrix c = a + b" << endl << c << endl;
+  TDynamicMatrixTriangle<int> d(5), e(5), f(5);
+
+  cout << "Тестирование класс работы с треугольными матрицами"
+      << endl;
+  for (i = 0; i < 5; i++)
+      for (j = i; j < 5; j++)
+      {
+          d[i][j] = i * 10 + j;
+          e[i][j] = (i * 10 + j) * 100;
+      }
+  f = d + e;
+  cout << "Matrix d = " << endl << d << endl;
+  cout << "Matrix e = " << endl << e << endl;
+  cout << "Matrix f = d + e" << endl << f << endl;
 }
 //---------------------------------------------------------------------------

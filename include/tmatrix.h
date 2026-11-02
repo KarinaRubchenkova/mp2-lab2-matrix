@@ -331,6 +331,12 @@ protected:
     size_t si;
     T* pMem;
 public:
+    static size_t check_matrix_size(size_t s)
+    {
+        if (s > MAX_MATRIX_SIZE)
+            throw "too large";
+        return s;
+    }
     TDynamicVectorTriangle(size_t size = 1, size_t si_ = 0) : sz(size), si(si_)
     {
         if (sz == 0)
@@ -528,6 +534,116 @@ public:
         return ostr;
     }
 
+};
+template<typename T>
+class TDynamicMatrixTriangle : private TDynamicVectorTriangle<TDynamicVectorTriangle<T>>
+{
+    using TDynamicVectorTriangle<TDynamicVectorTriangle<T>>::pMem;
+    using TDynamicVectorTriangle<TDynamicVectorTriangle<T>>::sz;
+
+public:
+    using TDynamicVectorTriangle<TDynamicVectorTriangle<T>>::size;
+    using TDynamicVectorTriangle<TDynamicVectorTriangle<T>>::at;
+    TDynamicMatrixTriangle(size_t s = 1)
+        : TDynamicVectorTriangle<TDynamicVectorTriangle<T>>(check_matrix_size(s))
+    {
+        for (size_t i = 0; i < sz; i++)
+            pMem[i] = TDynamicVectorTriangle<T>(sz);
+    }
+
+    using TDynamicVectorTriangle<TDynamicVectorTriangle<T>>::operator[];
+
+    // сравнение
+    bool operator==(const TDynamicMatrixTriangle& m) const noexcept
+    {
+        if (sz != m.sz) { return false; }
+        else {
+            for (size_t i = 0; i < sz; i++) {
+                if (pMem[i] != m.pMem[i]) { return false; }
+            }
+        }
+        return true;
+    }
+
+    // матрично-скалярные операции
+    TDynamicMatrixTriangle operator*(const T& val)
+    {
+        TDynamicMatrixTriangle<T> res(sz);
+        for (size_t i = 0; i < sz; i++) {
+            res.pMem[i] = pMem[i] * val;
+        }
+        return res;
+    }
+
+    // матрично-векторные операции
+    TDynamicVectorTriangle<T> operator*(const TDynamicVectorTriangle<T>& v) {
+        if (sz != v.size()|| v.num_strok() != 0 ) { throw "Error"; }
+        TDynamicVectorTriangle<T> res(sz);
+
+        for (size_t i = 0; i < sz; i++) {
+            res[i] = pMem[i] * v;
+        }
+
+        return res;
+    }
+
+    // матрично-матричные операции
+    TDynamicMatrixTriangle operator+(const TDynamicMatrixTriangle& m)
+    {
+        if (sz != m.sz || m.num_strok() != 0) { throw "Error"; }
+        TDynamicMatrixTriangle<T> res(sz);
+        for (size_t i = 0; i < sz; i++) {
+            res.pMem[i] = pMem[i] + m.pMem[i];
+        }
+        return res;
+    }
+    TDynamicMatrixTriangle operator-(const TDynamicMatrixTriangle& m)
+    {
+        if (sz != m.sz || m.num_strok() != 0) { throw "Error"; }
+        TDynamicMatrixTriangle<T> res(sz);
+        for (size_t i = 0; i < sz; i++) {
+            res.pMem[i] = pMem[i] - m.pMem[i];
+        }
+        return res;
+    }
+    TDynamicMatrixTriangle operator*(const TDynamicMatrixTriangle& m)
+    {
+
+        if (sz != m.sz|| m.num_strok() != 0 ) { throw "Error"; }
+        TDynamicMatrixTriangle<T> res(sz);
+        for (size_t i = 0; i < sz; i++) {
+            for (size_t j = 0; j < sz; j++) {
+                T sum = 0;
+                for (size_t k = 0; k < sz; k++) {
+                    sum += pMem[i][k] * m.pMem[k][j];
+                }
+                res[i][j] = sum;
+            }
+        }
+        return res;
+    }
+
+    // ввод/вывод
+    friend istream& operator>>(istream& istr, TDynamicMatrixTriangle& v)
+    {
+        for (size_t i = 0; i < v.sz; i++) {
+            istr >> v.pMem[i];
+        }
+        return istr;
+    }
+
+    friend ostream& operator<<(ostream& ostr, const TDynamicMatrixTriangle& v)
+    {
+        for (size_t i = 0; i < v.sz; i++) {
+            for (size_t j = 0; j < v.sz; j++) {
+                ostr << "| " << std::setw(5) << v.pMem[i][j] << ' ';
+            }
+
+            ostr << "| " << std::endl;
+        }
+
+        return ostr;
+    }
 };
 
 #endif
