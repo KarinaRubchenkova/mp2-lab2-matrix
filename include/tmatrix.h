@@ -548,7 +548,7 @@ public:
         : TDynamicVectorTriangle<TDynamicVectorTriangle<T>>(check_matrix_size(s))
     {
         for (size_t i = 0; i < sz; i++)
-            pMem[i] = TDynamicVectorTriangle<T>(sz);
+            pMem[i] = TDynamicVectorTriangle<T>(sz-i,i);
     }
 
     using TDynamicVectorTriangle<TDynamicVectorTriangle<T>>::operator[];
@@ -581,9 +581,10 @@ public:
         TDynamicVectorTriangle<T> res(sz);
 
         for (size_t i = 0; i < sz; i++) {
-            res[i] = pMem[i] * v;
+            for (size_t j = i; j < sz; j++) {
+                res[i] += pMem[i][j] * v[j];
+            }
         }
-
         return res;
     }
 
@@ -612,9 +613,9 @@ public:
         if (sz != m.sz|| m.num_strok() != 0 ) { throw "Error"; }
         TDynamicMatrixTriangle<T> res(sz);
         for (size_t i = 0; i < sz; i++) {
-            for (size_t j = 0; j < sz; j++) {
+            for (size_t j = i; j < sz; j++) {
                 T sum = 0;
-                for (size_t k = 0; k < sz; k++) {
+                for (size_t k = i; k < j + 1; k++) {
                     sum += pMem[i][k] * m.pMem[k][j];
                 }
                 res[i][j] = sum;
@@ -635,14 +636,16 @@ public:
     friend ostream& operator<<(ostream& ostr, const TDynamicMatrixTriangle& v)
     {
         for (size_t i = 0; i < v.sz; i++) {
-            for (size_t j = 0; j < v.sz; j++) {
-                if(v.pMem[i][j] != 0) ostr << "| " << std::setw(5) << v.pMem[i][j] << ' ';
-                else { ostr << "| " << std::setw(5) << ' ' << ' '; }
+            // Пустые ячейки до главной диагонали
+            for (size_t j = 0; j < i; j++) {
+                ostr << "| " << std::setw(5) << ' ' << ' ';
             }
-
-            ostr << "| " << std::endl;
+            // Сама строка и элементы выше диагонали
+            for (size_t j = i; j < v.sz; j++) {
+                ostr << "| " << std::setw(5) << v.pMem[i][j] << ' ';
+            }
+            ostr << "|" << std::endl;
         }
-
         return ostr;
     }
 };

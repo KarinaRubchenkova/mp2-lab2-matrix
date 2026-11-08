@@ -28,13 +28,13 @@ TEST(TDynamicMatrixTriangle, copied_matrix_is_equal_to_source_one)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
 	TDynamicMatrixTriangle<int> m2(m1);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			EXPECT_EQ(m1[i][j], m2[i][j]);
 		}
 	}
@@ -44,7 +44,7 @@ TEST(TDynamicMatrixTriangle, copied_matrix_has_its_own_memory)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
@@ -59,7 +59,7 @@ TEST(TDynamicMatrixTriangle, can_set_and_get_element)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
@@ -72,7 +72,7 @@ TEST(TDynamicMatrixTriangle, throws_when_set_element_with_negative_index)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
@@ -83,7 +83,7 @@ TEST(TDynamicMatrixTriangle, throws_when_set_element_with_too_large_index)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
@@ -94,13 +94,13 @@ TEST(TDynamicMatrixTriangle, can_assign_matrix_to_itself)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
 	m1 = m1;
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			EXPECT_EQ(1, m1[i][j]);
 		}
 	}
@@ -110,14 +110,14 @@ TEST(TDynamicMatrixTriangle, can_assign_matrices_of_equal_size)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
 	TDynamicMatrixTriangle<int> m2(4);
 	m2 = m1;
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			EXPECT_EQ(1, m2[i][j]);
 		}
 	}
@@ -127,7 +127,7 @@ TEST(TDynamicMatrixTriangle, assign_operator_change_matrix_size)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
@@ -140,14 +140,14 @@ TEST(TDynamicMatrixTriangle, can_assign_matrices_of_different_size)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
 	TDynamicMatrixTriangle<int> m2(10);
 	m2 = m1;
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			EXPECT_EQ(1, m2[i][j]);
 		}
 	}
@@ -158,7 +158,7 @@ TEST(TDynamicMatrixTriangle, compare_equal_matrices_return_true)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
@@ -170,7 +170,7 @@ TEST(TDynamicMatrixTriangle, compare_matrix_with_itself_return_true)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
@@ -181,13 +181,13 @@ TEST(TDynamicMatrixTriangle, matrices_with_different_size_are_not_equal)
 {
 	TDynamicMatrixTriangle<int> m1(4);
 	for (size_t i = 0; i < 4; i++) {
-		for (size_t j = 0; j < 4; j++) {
+		for (size_t j = i; j < 4; j++) {
 			m1[i][j] = 1;
 		}
 	}
 	TDynamicMatrixTriangle<int> m2(10);
 	for (size_t i = 0; i < 10; i++) {
-		for (size_t j = 0; j < 10; j++) {
+		for (size_t j = i; j < 10; j++) {
 			m2[i][j] = 1;
 		}
 	}
@@ -198,19 +198,19 @@ TEST(TDynamicMatrixTriangle, can_add_matrices_with_equal_size)
 {
 	TDynamicMatrixTriangle<int> m1(10);
 	for (size_t i = 0; i < 10; i++) {
-		for (size_t j = 0; j < 10; j++) {
+		for (size_t j = i; j < 10; j++) {
 			m1[i][j] = 1;
 		}
 	}
 	TDynamicMatrixTriangle<int> m2(10);
 	for (size_t i = 0; i < 10; i++) {
-		for (size_t j = 0; j < 10; j++) {
+		for (size_t j = i; j < 10; j++) {
 			m2[i][j] = 2;
 		}
 	}
 	TDynamicMatrixTriangle<int> res(m1);
 	for (size_t i = 0; i < 10; i++) {
-		for (size_t j = 0; j < 10; j++) {
+		for (size_t j = i; j < 10; j++) {
 			res[i][j] = m1[i][j] + m2[i][j];
 		}
 	}
@@ -221,13 +221,13 @@ TEST(TDynamicMatrixTriangle, cant_add_matrices_with_not_equal_size)
 {
 	TDynamicMatrixTriangle<int> m1(10);
 	for (size_t i = 0; i < 10; i++) {
-		for (size_t j = 0; j < 10; j++) {
+		for (size_t j = i; j < 10; j++) {
 			m1[i][j] = 1;
 		}
 	}
 	TDynamicMatrixTriangle<int> m2(8);
 	for (size_t i = 0; i < 8; i++) {
-		for (size_t j = 0; j < 8; j++) {
+		for (size_t j = i; j < 8; j++) {
 			m2[i][j] = 2;
 		}
 	}
@@ -238,19 +238,19 @@ TEST(TDynamicMatrixTriangle, can_subtract_matrices_with_equal_size)
 {
 	TDynamicMatrixTriangle<int> m1(10);
 	for (size_t i = 0; i < 10; i++) {
-		for (size_t j = 0; j < 10; j++) {
+		for (size_t j = i; j < 10; j++) {
 			m1[i][j] = 1;
 		}
 	}
 	TDynamicMatrixTriangle<int> m2(10);
 	for (size_t i = 0; i < 10; i++) {
-		for (size_t j = 0; j < 10; j++) {
+		for (size_t j = i; j < 10; j++) {
 			m2[i][j] = 2;
 		}
 	}
 	TDynamicMatrixTriangle<int> res(m1);
 	for (size_t i = 0; i < 10; i++) {
-		for (size_t j = 0; j < 10; j++) {
+		for (size_t j = i; j < 10; j++) {
 			res[i][j] = m1[i][j] - m2[i][j];
 		}
 	}
@@ -261,16 +261,17 @@ TEST(TDynamicMatrixTriangle, cant_subtract_matrixes_with_not_equal_size)
 {
 	TDynamicMatrixTriangle<int> m1(10);
 	for (size_t i = 0; i < 10; i++) {
-		for (size_t j = 0; j < 10; j++) {
+		for (size_t j = i; j < 10; j++) {
 			m1[i][j] = 1;
 		}
 	}
 	TDynamicMatrixTriangle<int> m2(8);
 	for (size_t i = 0; i < 8; i++) {
-		for (size_t j = 0; j < 8; j++) {
+		for (size_t j = i; j < 8; j++) {
 			m2[i][j] = 2;
 		}
 	}
 	EXPECT_ANY_THROW(m1 - m2);
 }
+
 
